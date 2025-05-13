@@ -38,4 +38,4 @@ class OrderItemDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return OrderItemSerializer
-        return OrderItemCreateUpdateSerializer
+        return [OrderItemCreateUpdateSerializer]

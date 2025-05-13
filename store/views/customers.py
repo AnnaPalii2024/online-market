@@ -8,7 +8,7 @@ from store.serializers.customer import CustomerSerializer, CustomerCreateUpdateS
 class CustomerListCreateView(ListCreateAPIView):
     queryset = Customer.objects.all()
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['last_name', 'date_joined']
+    filterset_fields = ['last__name', 'date_joined']
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
