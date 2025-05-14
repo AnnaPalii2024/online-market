@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from environ import Env
+from datetime import timedelta
 
 env = Env()
 
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     # 3-rd party
     'django_filters',
     'rest_framework',
+    'rest_framework_simplejwt',
 
     # local
     'store.apps.StoreConfig',
@@ -104,11 +106,12 @@ else:
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
-    ]
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+
 
 }
 
@@ -137,6 +140,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_TOKEN_CLASSES': [
+        'rest_framework_simplejwt.tokens.AccessToken',
+    ],
+
+}
 
 LOG_LEVEL = 'DEBUG' if DEBUG else 'INFO'      # ← переключаем через DEBUG
 
