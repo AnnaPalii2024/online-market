@@ -1,5 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from store.views.address import AddressViewSet
 from store.views.categories import CategoryViewSet
@@ -36,4 +40,8 @@ urlpatterns = [
     path('orders/<int:pk>/', OrderDetailUpdateDeleteView.as_view()),
     path('order-items/', OrderItemListCreateView.as_view()),
     path('order-items/<int:pk>/', OrderItemDetailUpdateDeleteView.as_view()),
+
+    path('auth-login/', TokenObtainPairView.as_view()),
+    path('auth-refresh-token/', TokenRefreshView.as_view()),
+
 ]
