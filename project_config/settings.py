@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3-rd party
+    'django_filters',
     'rest_framework',
+
     # local
     'store.apps.StoreConfig',
 ]
@@ -118,6 +120,47 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+LOG_LEVEL = 'DEBUG' if DEBUG else 'INFO'      # ← переключаем через DEBUG
+
+LOGGING = {
+    'version': 1,                             # обязательная «версия» формата dictConfig
+    'disable_existing_loggers': False,        # не гасим встроенные логгеры Django
+
+    'formatters': {                           # блок описания форматов вывода
+        'verbose': {                          # человекочитаемый формат «verbose»
+            'format': '[{asctime}] {levelname} {name}:{lineno} | {message}',  # шаблон строки
+            'style': '{',                     # используем f-строчный стиль с фигурными скобками
+            'datefmt': '%Y-%m-%d %H:%M:%S',   # формат даты/времени
+        },
+    },
+
+    'handlers': {                             # куда писать логи
+        'console': {                          # вывод в stdout
+            'class': 'logging.StreamHandler', # стандартный потоковый хэндлер
+            'level': LOG_LEVEL,               # уровень из LOG_LEVEL
+            'formatter': 'verbose',           # применяем formatter 'verbose'
+        },
+        'file': {                             # запись в файл с ротацией
+            'class': 'logging.handlers.RotatingFileHandler',  # встроенный ротационный хэндлер
+            'level': LOG_LEVEL,               # тот же уровень
+            'formatter': 'verbose',           # тот же формат
+            'filename': str(BASE_DIR / 'db_queries.log'),     # путь к файлу логов
+            'maxBytes': 10_000_000,           # максимум 10 МБ на файл
+            'backupCount': 5,                 # храним 5 архивных копий
+            'encoding': 'utf-8',              # явная кодировка файла
+        },
+    },
+
+    'loggers': {                              # сами логгеры (по именам)
+        'django.db.backends': {               # логгер SQL-запросов ORM
+            'handlers': ['console', 'file'],  # пишем и в консоль, и в файл
+            'level': LOG_LEVEL,               # уровень тот же
+            'propagate': False,               # не пересылать сообщения «выше» к root-логгеру
+        },
+    },
+}
 
 
 # Internationalization
