@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import Category
+from store.models import Category
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -12,4 +12,3 @@ class CategoryAdmin(admin.ModelAdmin):
 
     # Сортировка записей по полю 'name' в алфавитном порядке
     ordering = ('name',)
-
