@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 
 from store.models import Product, ProductDetail
 from store.serializers.product_detail import ProductDetailSerializer, ProductDetailCreateUpdateSerializer
@@ -21,6 +22,10 @@ class ProductListCreateView(ListCreateAPIView):
 
 class ProductRetrieveUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
+    #authentication_classes = []
+    permission_classes = [
+        IsAuthenticated
+    ]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
